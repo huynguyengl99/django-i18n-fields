@@ -1,0 +1,15 @@
+{
+    "include": ["i18n_fields", "sandbox"],
+    "typeCheckingMode": "strict",
+    "reportMissingTypeArgument": "warning",
+    "reportMissingTypeStubs": "warning",
+    "pythonVersion": "3.11",
+    "reportIncompatibleVariableOverride": "warning",
+    "reportUnknownMemberType": "warning",
+    "executionEnvironments": [
+        {
+            "root": "sandbox/config/settings",
+            "reportConstantRedefinition": "none"
+        }
+    ]
+}

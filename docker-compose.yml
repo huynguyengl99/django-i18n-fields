@@ -1,0 +1,18 @@
+services:
+  db:
+    image: postgres:15
+    volumes:
+      - "dbdata:/var/lib/postgresql/data"
+    env_file:
+      - .env.test
+    ports:
+      - "5418:5432"
+    networks:
+      - django-i18n-fields
+
+volumes:
+  dbdata:
+
+networks:
+  django-i18n-fields:
+    driver: bridge
