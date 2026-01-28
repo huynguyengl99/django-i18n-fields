@@ -3,8 +3,12 @@ target-version = "py311"
 
 [lint]
 ignore = [
+  "C901",  # function too complex - some business logic is inherently complex
   "E501",  # line too long, handled by black
-  "F405"  # defined from star imports
+  "F405",  # defined from star imports
+  "N802",  # function name should be lowercase - L() is intentional shorthand
+  "PLR0911",  # too many return statements - acceptable for type conversion logic
+  "PLR0912"  # too many branches - acceptable for complex validation logic
 ]
 select = [
   "B",  # flake8-bugbear
@@ -24,3 +28,7 @@ section-order = ["future", "standard-library", "django", "third-party", "first-p
 
 [lint.isort.sections]
 django = ["django", "rest_framework"]
+
+[lint.per-file-ignores]
+"sandbox/*/tests/*" = ["PLR2004"]  # magic values are acceptable in tests
+"tests/*" = ["PLR2004"]  # magic values are acceptable in tests

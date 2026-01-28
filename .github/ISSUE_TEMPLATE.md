@@ -1,4 +1,4 @@
-* Django I18N Fields version:
+* Django i18n Fields version:
 * Python version:
 * Operating System:
 

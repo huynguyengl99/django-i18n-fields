@@ -19,8 +19,8 @@ sys.path.append(os.path.abspath("../sandbox"))
 os.environ["DJANGO_SETTINGS_MODULE"] = "config.settings.dev"
 django.setup()
 
-project = "Django I18N Fields"
-copyright = "2026, Huy Nguyen"
+project = "Django i18n Fields"
+copyright = "2025, Huy Nguyen"
 author = "Huy Nguyen"
 
 release = version("django-i18n-fields")
@@ -40,10 +40,11 @@ extensions = [
     "sphinx.ext.autosummary",
     "sphinx.ext.intersphinx",
     "sphinx.ext.napoleon",
+    "sphinxcontrib_django",
 ]
 
 templates_path = ["_templates"]
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "images"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 
 # -- Options for HTML output -------------------------------------------------

@@ -1,0 +1,14 @@
+{% with widget_id=widget.attrs.id %}
+<div class="i18n-fields-widget" data-display="dropdown" data-synctabs="translation">
+    <select class="i18n-fields-language-selector">
+    {% for subwidget in widget.subwidgets %}
+        <option value="{{ subwidget.lang_code }}">{{ subwidget.lang_name|capfirst }}</option>
+    {% endfor %}
+    </select>
+    {% for subwidget in widget.subwidgets %}
+        <div class="i18n-fields-panel" data-lang="{{ subwidget.lang_code }}" id="{{ widget_id }}_{{ subwidget.lang_code }}">
+            {% include subwidget.template_name with widget=subwidget %}
+        </div>
+    {% endfor %}
+</div>
+{% endwith %}

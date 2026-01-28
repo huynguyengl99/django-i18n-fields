@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from accounts.models import User
 
 
-class UserAdmin(BaseUserAdmin[User]):  # pragma: no cover
+class UserAdmin(BaseUserAdmin):  # pragma: no cover  # type: ignore[type-arg]
     fieldsets = (
         (None, {"fields": ("email", "password")}),
         (_("Personal info"), {"fields": ("first_name", "last_name")}),

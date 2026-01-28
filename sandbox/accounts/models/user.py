@@ -123,12 +123,12 @@ class UserManager(BaseUserManager[_T]):
 
 
 class User(AbstractUser):
-    email = models.EmailField[str | Combinable, str](
+    email: models.EmailField[str | Combinable, str] = models.EmailField(
         verbose_name="email address",
         max_length=255,
         unique=True,
     )
-    objects: ClassVar[UserManager[User]] = UserManager["User"]()  # type: ignore[assignment]
+    objects: ClassVar[UserManager[User]] = UserManager()  # type: ignore[assignment]
 
     username = None  # type: ignore[assignment]
     EMAIL_FIELD = "email"

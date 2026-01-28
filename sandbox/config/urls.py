@@ -39,6 +39,8 @@ api_urlpatterns = [
         SpectacularRedocView.as_view(url_name="schema"),
         name="redoc",
     ),
+    # Articles API endpoints
+    path("", include("articles.urls")),
 ]
 
 

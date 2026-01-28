@@ -1,5 +1,5 @@
 {
-    "include": ["i18n_fields", "sandbox"],
+    "include": ["i18n_fields"],
     "typeCheckingMode": "strict",
     "reportMissingTypeArgument": "warning",
     "reportMissingTypeStubs": "warning",

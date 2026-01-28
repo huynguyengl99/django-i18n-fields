@@ -19,24 +19,32 @@ jobs:
         with:
             enable-cache: true
             python-version: 3.11
-      - name: Install tox
+      - name: Install tox with patched tox-gh
         run: uv tool install tox --with tox-uv --with tox-gh
       - name: Run lint
         run: tox -e lint
 
   test:
-    runs-on: ubuntu-latest
+    name: test py${{ matrix.py }}-django${{ matrix.django }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python-version: ["3.10", "3.11", "3.12", "3.13"]
+        py: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+        django: ["50", "51", "60"]
+        os: [ubuntu-latest]
+        exclude:
+          - py: "3.10"
+            django: "60"
+          - py: "3.11"
+            django: "60"
       fail-fast: false
     services:
       postgres:
         image: postgres
         env:
-          POSTGRES_PASSWORD: pg_test_pass
-          POSTGRES_DB: pg_test_db
-          POSTGRES_USER: pg_test_user
+          POSTGRES_PASSWORD: dif_test_pass
+          POSTGRES_DB: dif_test_db
+          POSTGRES_USER: dif_test_user
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -45,23 +53,32 @@ jobs:
         ports:
           - 5432:5432
     env:
-      POSTGRES_DB: pg_test_db
-      POSTGRES_USER: pg_test_user
-      POSTGRES_PASSWORD: pg_test_pass
+      POSTGRES_DB: dif_test_db
+      POSTGRES_USER: dif_test_user
+      POSTGRES_PASSWORD: dif_test_pass
       POSTGRES_HOST: localhost
       POSTGRES_PORT: 5432
-      TOX_GH_MAJOR_MINOR: ${{ matrix.python-version }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Install the latest version of uv
         uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
-          python-version: ${{ matrix.python-version }}
+          cache-dependency-glob: "pyproject.toml"
       - name: Install tox
-        run: uv tool install tox --with tox-uv --with tox-gh
-      - name: Run tests
-        run: tox
+        run: uv tool install --python-preference only-managed --python ${{ matrix.py }} tox --with tox-uv --with tox-gh
+      - name: Install Python
+        run: uv python install --python-preference only-managed ${{ matrix.py }}
+      - name: Setup test suite
+        run: tox run -vv --notest --skip-missing-interpreters false -e py$(echo "${{ matrix.py }}" | tr -d '.')-django${{ matrix.django }}
+        env:
+          TOX_GH_MAJOR_MINOR: ${{ matrix.py }}
+      - name: Run test suite
+        run: tox run --skip-pkg-install -e py$(echo "${{ matrix.py }}" | tr -d '.')-django${{ matrix.django }}
+        env:
+          TOX_GH_MAJOR_MINOR: ${{ matrix.py }}
 
   coverage:
     runs-on: ubuntu-latest
@@ -69,9 +86,9 @@ jobs:
       postgres:
         image: postgres
         env:
-          POSTGRES_PASSWORD: pg_test_pass
-          POSTGRES_DB: pg_test_db
-          POSTGRES_USER: pg_test_user
+          POSTGRES_PASSWORD: dif_test_pass
+          POSTGRES_DB: dif_test_db
+          POSTGRES_USER: dif_test_user
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -80,9 +97,9 @@ jobs:
         ports:
           - 5432:5432
     env:
-      POSTGRES_DB: pg_test_db
-      POSTGRES_USER: pg_test_user
-      POSTGRES_PASSWORD: pg_test_pass
+      POSTGRES_DB: dif_test_db
+      POSTGRES_USER: dif_test_user
+      POSTGRES_PASSWORD: dif_test_pass
       POSTGRES_HOST: localhost
       POSTGRES_PORT: 5432
     steps:
@@ -92,7 +109,7 @@ jobs:
         with:
           enable-cache: true
           python-version: "3.11"
-      - name: Install tox
+      - name: Install tox with patched tox-gh
         run: uv tool install tox --with tox-uv --with tox-gh
       - name: Run coverage
         run: tox -e coverage

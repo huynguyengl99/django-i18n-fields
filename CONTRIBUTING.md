@@ -1,6 +1,6 @@
-# Contributing to Django I18N Fields
+# Contributing to Django i18n Fields
 
-Thank you for your interest in contributing to Django I18N Fields! This guide will help you set up the
+Thank you for your interest in contributing to Django i18n Fields! This guide will help you set up the
 development environment and understand the tools and processes used in this project.
 
 ## Prerequisites
@@ -96,7 +96,7 @@ python sandbox/manage.py makemigrations
 
 ## Code quality tools
 
-Django I18N Fields uses several tools to ensure code quality. You should run these tools before submitting a pull request.
+Django i18n Fields uses several tools to ensure code quality. You should run these tools before submitting a pull request.
 
 ### Pre-commit hooks
 
@@ -245,4 +245,4 @@ When creating a pull request:
 - **Installation and distribution**: Test that the package installs correctly via pip
 - **Documentation**: Update README.md and documentation for any API changes
 
-Thank you for contributing to Django I18N Fields!
+Thank you for contributing to Django i18n Fields!

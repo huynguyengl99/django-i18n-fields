@@ -12,14 +12,10 @@ import os
 from pathlib import Path
 from typing import Any
 
-import django_stubs_ext
+import django
+
 import structlog
 from environs import env
-
-# =========================================================================
-# STUB MONKEYPATCH FOR DJANGO MYPY
-# =========================================================================
-django_stubs_ext.monkeypatch()
 
 # =========================================================================
 # PATH CONFIGURATION
@@ -69,7 +65,9 @@ INSTALLED_APPS = [
     "django_cleanup.apps.CleanupConfig",
     "debug_toolbar",
     "django_extensions",
+    "i18n_fields",
     "accounts",
+    "articles",
 ]
 
 # =========================================================================
@@ -120,6 +118,10 @@ TEMPLATES: list[dict[str, Any]] = [
 # =========================================================================
 # DATABASE CONFIGURATION
 # =========================================================================
+_db_options = {}
+if django.VERSION >= (5, 1):
+    _db_options["pool"] = True
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
@@ -128,9 +130,7 @@ DATABASES = {
         "PASSWORD": env.str("POSTGRES_PASSWORD", ""),
         "HOST": env.str("POSTGRES_HOST", "localhost"),
         "PORT": env.int("POSTGRES_PORT", 5432),
-        "OPTIONS": {
-            "pool": True,
-        },
+         "OPTIONS": _db_options,
     }
 }
 
@@ -169,9 +169,31 @@ AUTH_USER_MODEL = "accounts.User"
 
 LANGUAGE_CODE = "en"
 
+LANGUAGES = [
+    ("en", "English"),
+    ("nl", "Dutch"),
+    ("fr", "French"),
+    ("de", "German"),
+    ("es", "Spanish"),
+    ("it", "Italian"),
+    ("pt", "Portuguese"),
+    ("ja", "Japanese"),
+]
+
 TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
+
+# =========================================================================
+# i18n FIELDS CONFIGURATION
+# =========================================================================
+
+I18N_FIELDS = {
+    "DISPLAY": "tab",  # or "dropdown" for admin widgets
+    "FALLBACKS": {"nl": ["en"], "fr": ["en"], "de": ["en"]},
+    "MAX_RETRIES": 100,
+    "REGISTER_LOOKUPS": True,
+}
 
 # =========================================================================
 # STATIC FILES CONFIGURATION
@@ -191,7 +213,7 @@ REST_FRAMEWORK = {
         "rest_framework.renderers.JSONRenderer",
         "rest_framework.renderers.BrowsableAPIRenderer",
     ],
-    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_SCHEMA_CLASS": "config.auto_schema.CustomAutoSchema",
     "DEFAULT_PARSER_CLASSES": (
         "rest_framework.parsers.JSONParser",
         "rest_framework.parsers.FormParser",
@@ -206,8 +228,8 @@ REST_FRAMEWORK = {
 # =========================================================================
 
 SPECTACULAR_SETTINGS: dict[str, Any] = {
-    "TITLE": "Django I18N Fields API Documentation",
-    "DESCRIPTION": "Django I18N Fields OpenAPI specification",
+    "TITLE": "Django i18n Fields API Documentation",
+    "DESCRIPTION": "Django i18n Fields OpenAPI specification",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
     "COMPONENT_SPLIT_REQUEST": True,

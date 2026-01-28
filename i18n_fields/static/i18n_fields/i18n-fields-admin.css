@@ -1,0 +1,302 @@
+/* i18n_fields Admin Styles */
+
+/* Container */
+.i18n-fields-widget[data-display] {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* Override Django admin form-row styles */
+.form-row .i18n-fields-widget[data-display],
+.fieldBox .i18n-fields-widget[data-display],
+.field-box .i18n-fields-widget[data-display],
+.aligned .i18n-fields-widget[data-display] {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+/* Tab List */
+ul.i18n-fields-widget.tabs {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-end;
+    overflow-x: auto;
+    overflow-y: hidden;
+    margin: 0;
+    padding: 0 4px 6px 0;
+    list-style: none;
+    border-bottom: 1px solid #ccc;
+    gap: 3px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: auto;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* Scrollbar styling */
+ul.i18n-fields-widget.tabs::-webkit-scrollbar {
+    height: 8px;
+}
+
+ul.i18n-fields-widget.tabs::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+ul.i18n-fields-widget.tabs::-webkit-scrollbar-thumb {
+    background: #79aec8;
+    border-radius: 4px;
+}
+
+ul.i18n-fields-widget.tabs::-webkit-scrollbar-thumb:hover {
+    background: #417690;
+}
+
+/* Tab Item */
+li.i18n-fields-widget.tab {
+    flex: 0 0 auto;
+    display: inline-block;
+    width: auto;
+    max-width: fit-content;
+    border: 1px solid #79aec8;
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    background: #79aec8;
+    color: #fff;
+    font-weight: 400;
+    opacity: 0.6;
+    transition: opacity 0.2s, background 0.2s;
+}
+
+li.i18n-fields-widget.tab:hover {
+    background: #417690;
+    border-color: #417690;
+    opacity: 1;
+}
+
+li.i18n-fields-widget.tab label {
+    display: block;
+    padding: 5px 10px;
+    text-decoration: none;
+    color: #fff;
+    cursor: pointer;
+    white-space: nowrap;
+    font-size: 12px;
+    width: auto;
+    float: none;
+}
+
+li.i18n-fields-widget.tab.active,
+li.i18n-fields-widget.tab.active:hover {
+    background: #417690;
+    border-color: #417690;
+    opacity: 1;
+}
+
+/* Panels */
+.i18n-fields-panel {
+    display: none;
+    padding: 12px 0 0 0;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.i18n-fields-panel.active {
+    display: block;
+}
+
+/* File upload styling */
+.i18n-fields-widget p.file-upload {
+    margin-left: 0;
+}
+
+/* Dropdown Mode */
+.i18n-fields-widget[data-display="dropdown"] {
+    position: relative;
+}
+
+.i18n-fields-language-selector {
+    display: inline-block;
+    margin-bottom: 10px;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #fff;
+    font-size: 13px;
+    min-width: 120px;
+    cursor: pointer;
+}
+
+.i18n-fields-language-selector:focus {
+    border-color: #79aec8;
+    outline: none;
+    box-shadow: 0 0 3px rgba(121, 174, 200, 0.5);
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    ul.i18n-fields-widget.tabs {
+        border-bottom-color: #333;
+    }
+
+    ul.i18n-fields-widget.tabs::-webkit-scrollbar-track {
+        background: #333;
+    }
+
+    ul.i18n-fields-widget.tabs::-webkit-scrollbar-thumb {
+        background: #555;
+    }
+
+    .i18n-fields-language-selector {
+        background: #222;
+        border-color: #444;
+        color: #ddd;
+    }
+}
+
+html[data-theme="dark"] ul.i18n-fields-widget.tabs {
+    border-bottom-color: #333;
+}
+
+html[data-theme="dark"] .i18n-fields-language-selector {
+    background: #222;
+    border-color: #444;
+    color: #ddd;
+}
+
+/* Form controls - full width (need !important to override Django admin) */
+.i18n-fields-panel textarea,
+.i18n-fields-panel textarea.vLargeTextField {
+    width: 100% !important;
+    min-height: 120px;
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+.i18n-fields-panel input[type="text"],
+.i18n-fields-panel input.vTextField {
+    width: 100% !important;
+    box-sizing: border-box;
+}
+
+.i18n-fields-panel input[type="number"],
+.i18n-fields-panel input.vIntegerField {
+    width: 100% !important;
+    box-sizing: border-box;
+}
+
+.i18n-fields-panel select {
+    min-width: 120px;
+    box-sizing: border-box;
+}
+
+/* Martor (Markdown editor) integration */
+.i18n-fields-panel .main-martor {
+    width: 100%;
+}
+
+/* ============================== */
+/* Readonly Widget Styles         */
+/* ============================== */
+
+.i18n-readonly-widget {
+    display: block;
+    width: 100%;
+}
+
+/* Readonly Tabs */
+.i18n-readonly-tabs {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 3px;
+    margin-bottom: 0;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #ccc;
+    overflow-x: auto;
+}
+
+.i18n-readonly-tab {
+    flex: 0 0 auto;
+    padding: 5px 10px;
+    border: 1px solid #79aec8;
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    background: #79aec8;
+    color: #fff;
+    font-size: 12px;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s, background 0.2s;
+    white-space: nowrap;
+}
+
+.i18n-readonly-tab:hover {
+    background: #417690;
+    border-color: #417690;
+    opacity: 1;
+}
+
+.i18n-readonly-tab.active,
+.i18n-readonly-tab.active:hover {
+    background: #417690;
+    border-color: #417690;
+    opacity: 1;
+}
+
+/* Readonly Content */
+.i18n-readonly-contents {
+    padding: 10px 0;
+}
+
+.i18n-readonly-content {
+    display: none;
+    word-wrap: break-word;
+}
+
+.i18n-readonly-content.active,
+.i18n-readonly-content[style*="display: block"],
+.i18n-readonly-content:not([style*="display: none"]):first-child {
+    display: block;
+}
+
+/* Dropdown mode for readonly */
+.i18n-readonly-widget.i18n-dropdown-mode .i18n-readonly-select {
+    display: block;
+    margin-bottom: 10px;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #fff;
+    font-size: 13px;
+    min-width: 120px;
+    cursor: pointer;
+}
+
+/* Dark mode for readonly */
+@media (prefers-color-scheme: dark) {
+    .i18n-readonly-tabs {
+        border-bottom-color: #333;
+    }
+
+    .i18n-readonly-widget.i18n-dropdown-mode .i18n-readonly-select {
+        background: #222;
+        border-color: #444;
+        color: #ddd;
+    }
+}
+
+html[data-theme="dark"] .i18n-readonly-tabs {
+    border-bottom-color: #333;
+}
+
+html[data-theme="dark"] .i18n-readonly-widget.i18n-dropdown-mode .i18n-readonly-select {
+    background: #222;
+    border-color: #444;
+    color: #ddd;
+}

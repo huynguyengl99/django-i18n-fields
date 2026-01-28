@@ -12,6 +12,7 @@ dev = [
   "django-debug-toolbar>=5.1.0,<6",
   "django-extensions>=3.2.3,<4",
   "django-structlog>=9.1.0,<10",
+  "djangorestframework>=3,<4",
   "drf-spectacular>=0.28.0,<1",
   "environs>=14.1.1,<15",
   "factory-boy>=3.3.3,<4",
@@ -24,19 +25,19 @@ dev = [
   "pytest-django>=4.11.1,<5",
   "pytest-mock>=3.14.0,<4",
   "pytest-xdist>=3.6.1,<4",
-  "djangorestframework>=3,<4",
   "structlog>=25.2.0,<26"
 ]
 docs = [
   "Sphinx>=7.0.0,<8",
   "myst-parser>=4.0.1",
-  "sphinx_rtd_theme"
+  "sphinx_rtd_theme",
+  "sphinxcontrib-django>=2.5"
 ]
 lint = [
   "black>=25.1.0,<26",
   "django-stubs-ext>=5",
-  "django-stubs[compatible-mypy]>=5,<6",
-  "djangorestframework-stubs[compatible-mypy]>=3,<4",
+  "django-stubs[compatible-mypy]>=5",
+  "djangorestframework-stubs[compatible-mypy]>=3",
   "interrogate>=1.7.0",
   "mypy>=1.15.0",
   "pre-commit>=3.4.0,<4.0.0",
@@ -73,7 +74,8 @@ classifiers = [
   "Topic :: Software Development"
 ]
 dependencies = [
-  "Django>=5"
+  "Django>=5",
+  "typing-extensions"
 ]
 description = "Structured internationalization fields for Django models."
 license = {file = "LICENSE"}
@@ -127,6 +129,12 @@ ignore-property-decorators = false
 style = "sphinx"
 verbose = 0
 whitelist-regex = []
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings.test"
+python_files = ["*_test.py", "test_*.py"]
+pythonpath = [".", "sandbox"]
+testpaths = ["tests"]
 
 [tool.tomlsort]
 all = true

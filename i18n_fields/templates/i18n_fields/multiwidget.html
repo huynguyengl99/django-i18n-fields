@@ -1,0 +1,16 @@
+{% with widget_id=widget.attrs.id %}
+<div class="i18n-fields-widget" role="tabs" data-display="tabs">
+    <ul class="i18n-fields-widget tabs">
+    {% for subwidget in widget.subwidgets %}
+        <li class="i18n-fields-widget tab">
+            <label for="{{ widget_id }}_{{ subwidget.lang_code }}">{{ subwidget.lang_name|capfirst }}</label>
+        </li>
+    {% endfor %}
+    </ul>
+    {% for subwidget in widget.subwidgets %}
+        <div class="i18n-fields-panel" role="tabpanel" id="{{ widget_id }}_{{ subwidget.lang_code }}" data-lang="{{ subwidget.lang_code }}">
+            {% include subwidget.template_name with widget=subwidget %}
+        </div>
+    {% endfor %}
+</div>
+{% endwith %}
