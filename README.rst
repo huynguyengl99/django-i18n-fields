@@ -21,10 +21,6 @@ DJANGO i18n FIELDS
    :target: https://microsoft.github.io/pyright/
    :alt: Checked with pyright
 
-.. image:: https://chanx.readthedocs.io/en/latest/_static/interrogate_badge.svg
-   :target: https://github.com/huynguyengl99/django-i18n-fields
-   :alt: Docstring
-
 A modern Django package providing structured internationalization (i18n) for model fields. Store and manage multilingual content directly in your Django models using a clean, database-agnostic approach.
 
 **Improved alternative to django-localized-fields** - Works with all databases, not just PostgreSQL.
