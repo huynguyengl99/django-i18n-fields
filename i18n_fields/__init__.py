@@ -21,7 +21,7 @@ Settings (in settings.py):
     }
 """
 
-from .admin import LocalizedFieldsAdminMixin
+from .admin import LocalizedFieldsAdmin, LocalizedFieldsAdminMixin
 from .expressions import L, LocalizedRef
 from .fields import (
     LocalizedBooleanField,
@@ -63,6 +63,7 @@ __all__ = [
     "LocalizedFileValue",
     # Admin
     "LocalizedFieldsAdminMixin",
+    "LocalizedFieldsAdmin",
     # Mixins
     "AtomicSlugRetryMixin",
     # Expressions

@@ -90,14 +90,21 @@ Django Admin
 
 .. code-block:: python
 
-    # admin.py
+    # admin.py - Option 1: Using the base class (recommended)
+    from i18n_fields import LocalizedFieldsAdmin
+
+    @admin.register(Article)
+    class ArticleAdmin(LocalizedFieldsAdmin):
+        list_display = ['title', 'created_at']
+        # Automatic tab/dropdown widgets for all localized fields!
+
+    # admin.py - Option 2: Using the mixin with your own base class
     from django.contrib import admin
     from i18n_fields import LocalizedFieldsAdminMixin
 
     @admin.register(Article)
     class ArticleAdmin(LocalizedFieldsAdminMixin, admin.ModelAdmin):
         list_display = ['title', 'created_at']
-        # Automatic tab/dropdown widgets for all localized fields!
 
 Django REST Framework
 ~~~~~~~~~~~~~~~~~~~~~

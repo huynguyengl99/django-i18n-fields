@@ -3,6 +3,35 @@ Admin Reference
 
 This page documents the Django admin integration components.
 
+LocalizedFieldsAdmin
+--------------------
+
+.. class:: LocalizedFieldsAdmin
+
+   Base admin class for models with localized fields. Combines ``LocalizedFieldsAdminMixin`` with ``admin.ModelAdmin``.
+
+   **Usage:**
+
+   .. code-block:: python
+
+       from i18n_fields import LocalizedFieldsAdmin
+       from .models import Article
+
+       @admin.register(Article)
+       class ArticleAdmin(LocalizedFieldsAdmin):
+           list_display = ['title', 'created_at']
+
+   **Features:**
+
+   - All features of ``LocalizedFieldsAdminMixin``
+   - No need to explicitly extend ``admin.ModelAdmin``
+   - Cleaner, more concise syntax
+   - Full type safety with Generic types
+
+   **When to Use:**
+
+   Use ``LocalizedFieldsAdmin`` when you don't need to combine with other admin base classes. For multiple inheritance scenarios, use ``LocalizedFieldsAdminMixin`` instead.
+
 LocalizedFieldsAdminMixin
 -------------------------
 
@@ -488,17 +517,21 @@ Add custom styling:
 Best Practices
 --------------
 
-1. **Always Use the Mixin**
+1. **Use LocalizedFieldsAdmin or LocalizedFieldsAdminMixin**
 
-   Include ``LocalizedFieldsAdminMixin`` for proper widget support:
+   Always use one of these for proper widget support:
 
    .. code-block:: python
 
-       # Good
+       # Best - using base class
+       class ArticleAdmin(LocalizedFieldsAdmin):
+           pass
+
+       # Good - using mixin
        class ArticleAdmin(LocalizedFieldsAdminMixin, admin.ModelAdmin):
            pass
 
-       # Missing features
+       # Missing features - don't do this
        class ArticleAdmin(admin.ModelAdmin):
            pass
 

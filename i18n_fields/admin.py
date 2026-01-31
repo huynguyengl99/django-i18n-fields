@@ -1,9 +1,14 @@
 """Admin mixins and utilities for localized fields."""
 
+from collections.abc import Callable
 from functools import partial
-from typing import Any, cast
+from typing import TYPE_CHECKING, Any, ClassVar, Generic, cast
 
+from django.contrib import admin
 from django.db import models
+from django.db.models import Model
+
+from typing_extensions import TypeVar
 
 from . import widgets
 from .fields import (
@@ -16,6 +21,19 @@ from .fields import (
     LocalizedTextField,
 )
 from .value import LocalizedValue
+
+if TYPE_CHECKING:
+    from django.contrib.admin.options import (
+        _FieldOpts,
+        _FieldsetSpec,
+        _ListDisplayT,
+    )  # noqa
+    from django.utils.datastructures import _ListOrTuple  # noqa
+    from django.utils.functional import _StrOrPromise  # noqa
+
+
+_ModelT = TypeVar("_ModelT", bound=Model, default=Model)
+
 
 # Order matters! More specific classes must come before their base classes
 # because isinstance() matches subclasses
@@ -133,7 +151,7 @@ def _get_localized_field_readonly_display(
         )
 
 
-class LocalizedFieldsAdminMixin:
+class LocalizedFieldsAdminMixin(Generic[_ModelT]):
     """Mixin for Django Admin that enables localized field widgets.
 
     Add this mixin to your ModelAdmin to get fancy tab/dropdown widgets
@@ -152,6 +170,10 @@ class LocalizedFieldsAdminMixin:
 
     # Override to change display mode: "tab" or "dropdown"
     localized_fields_display: str | None = None
+    list_display: "_ListDisplayT[_ModelT]"
+    search_fields: ClassVar["_ListOrTuple[str]"]
+    readonly_fields: ClassVar["_ListOrTuple[str]"]
+    model: type[_ModelT]
 
     # Internal: mapping from original field name to readonly method name
     _localized_readonly_field_map: dict[str, str]
@@ -185,7 +207,7 @@ class LocalizedFieldsAdminMixin:
         """
         if model is None:
             return
-        if not hasattr(self, "readonly_fields") or not self.readonly_fields:  # type: ignore[has-type]
+        if not hasattr(self, "readonly_fields") or not self.readonly_fields:
             return
 
         # Get localized field names from the model
@@ -202,7 +224,7 @@ class LocalizedFieldsAdminMixin:
         # Build new readonly_fields list, replacing localized field names
         # with custom method names
         new_readonly_fields: list[str] = []
-        for item in self.readonly_fields:  # type: ignore[has-type]
+        for item in self.readonly_fields:
             if item in localized_field_names:
                 # Create a unique method name that won't conflict with model field
                 method_name = f"_readonly_{item}_display"
@@ -231,49 +253,43 @@ class LocalizedFieldsAdminMixin:
                 new_readonly_fields.append(item)
 
         # Replace readonly_fields with the new list
-        self.readonly_fields = new_readonly_fields
+        self.readonly_fields = new_readonly_fields  # type: ignore
 
-    def get_fieldsets(
-        self, request: Any, obj: Any = None
-    ) -> list[tuple[Any, dict[str, Any]]]:
+    def get_fieldsets(self, request: Any, obj: Any = None) -> "_FieldsetSpec":
         """Get fieldsets with localized readonly field names replaced.
 
         This overrides the parent method to replace original field names
         with their readonly method names in fieldsets.
         """
-        fieldsets = super().get_fieldsets(request, obj)  # type: ignore[misc]
+        fieldsets = cast("_FieldsetSpec", super().get_fieldsets(request, obj))  # type: ignore[misc]
 
         if not self._localized_readonly_field_map:
-            return fieldsets  # type: ignore[no-any-return]
+            return fieldsets
 
         # Replace field names in fieldsets
-        new_fieldsets: list[tuple[Any, dict[str, Any]]] = []
-        for fieldset_item in fieldsets:  # pyright: ignore[reportUnknownVariableType]
-            name = cast(Any, fieldset_item[0])
-            options = cast(Any, fieldset_item[1])
-            new_options: dict[str, Any] = cast(dict[str, Any], options).copy()
+        new_fieldsets: list[tuple[_StrOrPromise | None, _FieldOpts]] = []
+        for fieldset_item in fieldsets:
+            name = fieldset_item[0]
+            options = fieldset_item[1]
+            new_options = options.copy()
             if "fields" in new_options:
                 new_fields: list[Any] = []
                 for field in new_options["fields"]:
                     if isinstance(field, list | tuple):
                         # Handle inline fields (multiple fields on same line)
                         new_inline: list[str] = []
-                        for f in field:  # pyright: ignore[reportUnknownVariableType]
+                        for f in field:
                             new_inline.append(
-                                self._localized_readonly_field_map.get(
-                                    cast(str, f), cast(str, f)
-                                )
+                                self._localized_readonly_field_map.get(f, f)
                             )
                         new_fields.append(
-                            type(field)(  # pyright: ignore[reportUnknownArgumentType]
-                                new_inline
+                            type(field)(
+                                new_inline  # pyright: ignore[reportArgumentType]
                             )
                         )
                     else:
                         new_fields.append(
-                            self._localized_readonly_field_map.get(
-                                cast(str, field), cast(str, field)
-                            )
+                            self._localized_readonly_field_map.get(field, field)
                         )
                 new_options["fields"] = new_fields
             new_fieldsets.append((name, new_options))
@@ -284,8 +300,7 @@ class LocalizedFieldsAdminMixin:
         """Set up display methods for localized fields in list_display."""
         if (
             not hasattr(self, "model")
-            or self.model  # pyright: ignore[reportAttributeAccessIssue, reportUnknownMemberType]
-            is None
+            or self.model is None  # pyright: ignore[reportUnnecessaryComparison]
         ):
             return
 
@@ -300,18 +315,18 @@ class LocalizedFieldsAdminMixin:
                 localized_field_names.add(field.name)
 
         # Replace field names in list_display with display methods
-        if hasattr(self, "list_display") and self.list_display:  # type: ignore[has-type]
-            new_list_display: list[str] = []
-            for item in self.list_display:  # type: ignore[has-type]
+        if hasattr(self, "list_display") and self.list_display:
+            new_list_display: list[str | Callable[[Any], str | bool]] = []
+            for item in self.list_display:
                 if item in localized_field_names:
                     # Create a display method for this field
                     method_name = f"_localized_{item}_display"
                     if not hasattr(self, method_name):
                         # Create the method dynamically
                         display_func = partial(
-                            _get_localized_field_display, field_name=item
+                            _get_localized_field_display, field_name=item  # type: ignore[arg-type]
                         )
-                        display_func.short_description = item.replace("_", " ").title()  # type: ignore[attr-defined]
+                        display_func.short_description = item.replace("_", " ").title()  # type: ignore[attr-defined, union-attr]
                         display_func.admin_order_field = item  # type: ignore[attr-defined]
                         setattr(self, method_name, display_func)
                     new_list_display.append(method_name)
@@ -375,7 +390,7 @@ class LocalizedFieldsAdminMixin:
 
         # Get localized field names
         localized_field_names: set[str] = set()
-        for field in self.model._meta.get_fields():  # type: ignore[attr-defined]
+        for field in self.model._meta.get_fields():
             if isinstance(field, LocalizedField):
                 localized_field_names.add(field.name)
 
@@ -383,7 +398,7 @@ class LocalizedFieldsAdminMixin:
         localized_search_fields: list[str] = []
         non_localized_search_fields: list[str] = []
 
-        for search_field in self.search_fields:  # type: ignore[has-type]
+        for search_field in self.search_fields:
             # Remove any search field prefixes (^, =, @)
             field_name: str = search_field.lstrip("^=@")
             if field_name in localized_field_names:
@@ -395,10 +410,10 @@ class LocalizedFieldsAdminMixin:
         use_distinct: bool
         if non_localized_search_fields:
             # Temporarily set search_fields to only non-localized ones
-            original_search_fields = self.search_fields  # type: ignore[has-type]
-            self.search_fields = non_localized_search_fields
+            original_search_fields = self.search_fields
+            self.search_fields = non_localized_search_fields  # type: ignore[misc]
             queryset, use_distinct = super().get_search_results(request, queryset, search_term)  # type: ignore[misc]
-            self.search_fields = original_search_fields
+            self.search_fields = original_search_fields  # type: ignore[misc]
         else:
             use_distinct = False
 
@@ -431,3 +446,20 @@ class LocalizedFieldsAdminMixin:
                 use_distinct = True
 
         return queryset, use_distinct  # pyright: ignore[reportUnknownVariableType]
+
+
+if TYPE_CHECKING:
+
+    class BaseLocalizedFieldsAdmin(
+        LocalizedFieldsAdminMixin[_ModelT], admin.ModelAdmin[_ModelT], Generic[_ModelT]
+    ):
+        pass
+
+else:
+
+    class BaseLocalizedFieldsAdmin(LocalizedFieldsAdminMixin, admin.ModelAdmin):
+        pass
+
+
+class LocalizedFieldsAdmin(BaseLocalizedFieldsAdmin, Generic[_ModelT]):
+    pass

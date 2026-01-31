@@ -9,7 +9,26 @@ Quick Setup
 Basic Admin Integration
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Use the ``LocalizedFieldsAdminMixin`` to automatically enable localized field widgets:
+There are two ways to enable localized field widgets in Django admin:
+
+**Option 1: Using LocalizedFieldsAdmin (Recommended)**
+
+Use the ``LocalizedFieldsAdmin`` base class for the simplest setup:
+
+.. code-block:: python
+
+    # admin.py
+    from i18n_fields import LocalizedFieldsAdmin
+    from .models import Article
+
+    @admin.register(Article)
+    class ArticleAdmin(LocalizedFieldsAdmin):
+        list_display = ['title', 'created_at']
+        fields = ['title', 'content', 'published']
+
+**Option 2: Using LocalizedFieldsAdminMixin**
+
+Use the mixin when you need to combine with other base classes:
 
 .. code-block:: python
 
@@ -282,7 +301,7 @@ Here's a comprehensive example:
     # admin.py
     from django.contrib import admin
     from django.utils.html import format_html
-    from i18n_fields import LocalizedFieldsAdminMixin, L
+    from i18n_fields import LocalizedFieldsAdmin, L
     from .models import Article, Category
 
     class CategoryInline(admin.TabularInline):
@@ -290,7 +309,7 @@ Here's a comprehensive example:
         extra = 1
 
     @admin.register(Article)
-    class ArticleAdmin(LocalizedFieldsAdminMixin, admin.ModelAdmin):
+    class ArticleAdmin(LocalizedFieldsAdmin):
         # Display mode
         localized_fields_display = 'tab'
 
@@ -364,17 +383,21 @@ The admin widgets come with default styles, but you can customize them:
 Best Practices
 --------------
 
-1. **Use the Mixin**
+1. **Use LocalizedFieldsAdmin or LocalizedFieldsAdminMixin**
 
-   Always include ``LocalizedFieldsAdminMixin`` for localized fields:
+   Always use one of these for localized fields:
 
    .. code-block:: python
 
-       # Good
+       # Best - using base class (recommended)
+       class ArticleAdmin(LocalizedFieldsAdmin):
+           pass
+
+       # Good - using mixin
        class ArticleAdmin(LocalizedFieldsAdminMixin, admin.ModelAdmin):
            pass
 
-       # Missing features without mixin
+       # Missing features without them
        class ArticleAdmin(admin.ModelAdmin):
            pass
 
