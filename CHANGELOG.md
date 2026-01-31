@@ -1,3 +1,9 @@
+## v1.1.1 (2026-02-01)
+
+### Fix
+
+- add generic param for BaseLocalizedFieldsAdmin
+
 ## v1.1.0 (2026-02-01)
 
 ### Feat

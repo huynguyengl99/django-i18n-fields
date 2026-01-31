@@ -82,7 +82,7 @@ license = {file = "LICENSE"}
 name = "django-i18n-fields"
 readme = "README.rst"
 requires-python = ">=3.10,<4.0"
-version = "1.1.0"
+version = "1.1.1"
 
 [project.urls]
 Documentation = "https://django-i18n-fields.readthedocs.io/"
