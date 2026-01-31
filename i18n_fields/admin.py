@@ -457,9 +457,11 @@ if TYPE_CHECKING:
 
 else:
 
-    class BaseLocalizedFieldsAdmin(LocalizedFieldsAdminMixin, admin.ModelAdmin):
+    class BaseLocalizedFieldsAdmin(
+        LocalizedFieldsAdminMixin, admin.ModelAdmin, Generic[_ModelT]
+    ):
         pass
 
 
-class LocalizedFieldsAdmin(BaseLocalizedFieldsAdmin, Generic[_ModelT]):
+class LocalizedFieldsAdmin(BaseLocalizedFieldsAdmin[_ModelT], Generic[_ModelT]):
     pass
