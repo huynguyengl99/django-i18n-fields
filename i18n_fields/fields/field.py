@@ -174,7 +174,12 @@ class LocalizedField(models.JSONField, Generic[ValueT]):
         # Value is now dict[str, Any] | ValueT | None
         if isinstance(value, dict) and not isinstance(value, LocalizedValue):
             value = self.attr_class(value)
-        elif value is not None and not isinstance(value, LocalizedValue):
+        elif (
+            value is not None
+            and not isinstance(  # pyright: ignore[reportUnnecessaryIsInstance]
+                value, LocalizedValue
+            )
+        ):
             # Handle invalid types (like lists) - return None
             return None
 

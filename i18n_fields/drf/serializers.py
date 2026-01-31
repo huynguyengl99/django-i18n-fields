@@ -4,9 +4,12 @@ This module provides a ModelSerializer subclass that automatically maps
 localized field types to appropriate DRF serializer fields.
 """
 
-from typing import Any
+from typing import Any, Generic
 
+from django.db.models import Model
 from rest_framework.serializers import ModelSerializer
+
+from typing_extensions import TypeVar
 
 from ..fields import (
     LocalizedBooleanField,
@@ -20,8 +23,10 @@ from ..fields import (
 )
 from . import serializer_fields
 
+_MT = TypeVar("_MT", bound=Model, default=Model)
 
-class LocalizedModelSerializer(ModelSerializer):  # type: ignore[type-arg] # pyright: ignore[reportMissingTypeArgument]
+
+class LocalizedModelSerializer(ModelSerializer[_MT], Generic[_MT]):
     """A ModelSerializer that automatically maps localized fields to DRF fields.
 
     This serializer handles the serialization and deserialization of localized
