@@ -300,6 +300,57 @@ LocalizedFileField
            name = document.file.name
            size = document.file.size
 
+LocalizedMartorField
+--------------------
+
+.. class:: LocalizedMartorField(**options)
+
+   Localized field for Markdown text using the `martor <https://github.com/agusmakmun/django-markdown-editor>`_ editor.
+
+   Requires the ``martor`` package to be installed. Install via ``pip install django-i18n-fields[md]`` or ``pip install martor``.
+
+   **Parameters:**
+
+   - All ``LocalizedField`` options
+
+   **Example:**
+
+   .. code-block:: python
+
+       from i18n_fields import LocalizedMartorField
+
+       class Article(models.Model):
+           content = LocalizedMartorField(blank=True)
+           notes = LocalizedMartorField(required=['en'])
+
+   **Value Type:** Returns ``LocalizedStringValue``
+
+   **Admin Integration:**
+
+   When used with ``LocalizedFieldsAdminMixin`` or ``LocalizedFieldsAdmin``, the field automatically renders as a Markdown editor with preview support for each language tab/dropdown.
+
+   **Usage:**
+
+   .. code-block:: python
+
+       article = Article.objects.create(
+           content={
+               'en': '# Hello World\n\nThis is **markdown** content.',
+               'es': '# Hola Mundo\n\nEste es contenido en **markdown**.',
+           }
+       )
+
+       # Access like any other localized field
+       print(article.content)  # Returns markdown string in active language
+
+   **Setup:**
+
+   1. Install martor: ``pip install django-i18n-fields[md]``
+   2. Add ``'martor'`` to ``INSTALLED_APPS``
+   3. Include martor URLs: ``path('martor/', include('martor.urls'))``
+
+   See the `martor documentation <https://django-markdown-editor.readthedocs.io/en/latest/index.html>`_ for full configuration options (toolbar customization, image uploads, emoji support, etc.).
+
 LocalizedUniqueSlugField
 ------------------------
 

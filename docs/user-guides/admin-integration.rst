@@ -144,6 +144,40 @@ Organize localized fields in fieldsets:
             }),
         ]
 
+Markdown Editor (Martor)
+-------------------------
+
+If you use ``LocalizedMartorField`` for Markdown content, the admin automatically renders a full-featured Markdown editor for each language:
+
+.. code-block:: python
+
+    # models.py
+    from i18n_fields import LocalizedCharField, LocalizedMartorField
+
+    class Article(models.Model):
+        title = LocalizedCharField(max_length=200, required=['en'])
+        content = LocalizedMartorField(blank=True)
+
+.. code-block:: python
+
+    # admin.py
+    from i18n_fields import LocalizedFieldsAdmin
+    from .models import Article
+
+    @admin.register(Article)
+    class ArticleAdmin(LocalizedFieldsAdmin):
+        list_display = ['title', 'created_at']
+
+No extra configuration needed in the admin — the Markdown editor widget is used automatically for ``LocalizedMartorField``.
+
+**Requirements:**
+
+1. Install martor: ``pip install django-i18n-fields[md]``
+2. Add ``'martor'`` to ``INSTALLED_APPS``
+3. Include martor URLs in your ``urls.py``: ``path('martor/', include('martor.urls'))``
+
+For martor configuration options (toolbar buttons, image uploads, themes, etc.), see the `martor documentation <https://django-markdown-editor.readthedocs.io/en/latest/index.html>`_.
+
 Inline Admin
 ------------
 

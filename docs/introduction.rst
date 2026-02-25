@@ -27,6 +27,7 @@ Key Features
 - IntegerField, FloatField, BooleanField for typed data
 - FileField for multilingual file uploads
 - UniqueSlugField with per-language uniqueness
+- MartorField for Markdown editing (requires ``martor``)
 - All fields support language-specific validation
 
 **🎯 Flexible Storage**
@@ -83,6 +84,7 @@ Django i18n Fields follows a clean, modular architecture:
 2. **DRF System**: Serializers and fields for REST API integration
 3. **Expression System**: Query expressions for database-level translation queries
 4. **Lookup System**: Custom field lookups for filtering by language
+5. **Markdown System**: Markdown editor integration via `martor <https://github.com/agusmakmun/django-markdown-editor>`_
 
 **Design Principles:**
 

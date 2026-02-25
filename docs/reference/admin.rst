@@ -113,6 +113,7 @@ LocalizedFieldsAdminMixin
 
       - ``admin/js/jquery.init.js``
       - ``i18n_fields/i18n-fields-admin.js``
+      - ``i18n_fields/js/martor_tabs.js`` (included automatically when martor is installed)
 
 Display Modes
 -------------
@@ -244,6 +245,23 @@ AdminLocalizedFileFieldWidget
    - Shows current file
    - Clear checkbox
    - Upload new file
+
+AdminLocalizedMartorWidget
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. class:: AdminLocalizedMartorWidget(display_mode='tab')
+
+   Widget for ``LocalizedMartorField`` with Markdown editor.
+
+   **Requires:** ``martor`` package installed
+
+   **Features:**
+
+   - Full Markdown editor with toolbar (bold, italic, links, images, etc.)
+   - Live preview support
+   - Syntax highlighting
+   - Emoji and mention support (configurable via martor settings)
+   - Works with both tab and dropdown display modes
 
 List Display
 ------------

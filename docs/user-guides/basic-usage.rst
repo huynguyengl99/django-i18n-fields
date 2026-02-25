@@ -22,6 +22,7 @@ Django i18n Fields provides localized versions of common Django field types:
         LocalizedBooleanField,
         LocalizedFileField,
         LocalizedUniqueSlugField,
+        LocalizedMartorField,  # Requires: pip install django-i18n-fields[md]
     )
 
     class Product(models.Model):
@@ -32,6 +33,7 @@ Django i18n Fields provides localized versions of common Django field types:
         is_available = LocalizedBooleanField(blank=True)
         image = LocalizedFileField(upload_to='products/', blank=True)
         slug = LocalizedUniqueSlugField(populate_from='name')
+        notes = LocalizedMartorField(blank=True)  # Markdown editor
 
 Field Options
 ~~~~~~~~~~~~~

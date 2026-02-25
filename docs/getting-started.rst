@@ -22,6 +22,7 @@ Add ``i18n_fields`` to your ``INSTALLED_APPS``:
         'django.contrib.auth',
         # ... other apps
         'i18n_fields',
+        # 'martor',  # Optional: add if using LocalizedMartorField for Markdown support
     ]
 
 2. **Configure Languages**
@@ -135,6 +136,36 @@ To use localized fields in Django admin, use the ``LocalizedFieldsAdminMixin``:
         localized_fields_display = 'tab'
 
 The admin will automatically show tab or dropdown widgets for all localized fields.
+
+Markdown Editor Support
+------------------------
+
+If you need a Markdown editor for your localized fields, install the ``md`` extra and use ``LocalizedMartorField``:
+
+.. code-block:: bash
+
+    pip install django-i18n-fields[md]
+
+.. code-block:: python
+
+    # models.py
+    from i18n_fields import LocalizedMartorField
+
+    class Article(models.Model):
+        title = LocalizedCharField(required=['en'])
+        content = LocalizedMartorField(blank=True)  # Markdown editor
+
+Remember to add ``'martor'`` to your ``INSTALLED_APPS`` and include martor's URL patterns:
+
+.. code-block:: python
+
+    # urls.py
+    urlpatterns = [
+        # ...
+        path('martor/', include('martor.urls')),
+    ]
+
+For more martor configuration options, see the `martor documentation <https://django-markdown-editor.readthedocs.io/en/latest/index.html>`_.
 
 Django REST Framework Setup
 ----------------------------

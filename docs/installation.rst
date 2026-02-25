@@ -13,8 +13,7 @@ Django i18n Fields has minimal dependencies:
 
 **Optional Dependencies**:
 
-- **Django REST Framework** (>=3.0) - For REST API integration
-- **DRF Spectacular** - For automatic API documentation generation
+- **martor** - For Markdown editor support (``LocalizedMartorField``)
 
 Installation Options
 --------------------
@@ -28,14 +27,17 @@ Install Django i18n Fields using pip:
 
     pip install django-i18n-fields
 
-With Django REST Framework Support
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+With Markdown Editor Support
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If you're using Django REST Framework:
+To use ``LocalizedMartorField`` for Markdown editing with `martor <https://github.com/agusmakmun/django-markdown-editor>`_ (`docs <https://django-markdown-editor.readthedocs.io/en/latest/index.html>`_):
 
 .. code-block:: bash
 
-    pip install django-i18n-fields djangorestframework
+    pip install django-i18n-fields[md]
+
+    # Or install martor separately
+    pip install django-i18n-fields martor
 
 Install from Git
 ~~~~~~~~~~~~~~~~
@@ -63,6 +65,9 @@ After installation, verify that Django i18n Fields is properly installed:
 
     # Check available modules
     from i18n_fields import LocalizedCharField, LocalizedTextField
+
+    # Check Markdown/martor support (if installed)
+    from i18n_fields import LocalizedMartorField
 
     # Check DRF support (if installed)
     from i18n_fields.drf import LocalizedModelSerializer

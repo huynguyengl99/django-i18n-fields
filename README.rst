@@ -29,13 +29,13 @@ Key Features
 ------------
 
 🌍 **Comprehensive Field Types**
-   CharField, TextField, IntegerField, FloatField, BooleanField, FileField, and UniqueSlugField with multilingual support
+   CharField, TextField, IntegerField, FloatField, BooleanField, FileField, UniqueSlugField, and MartorField (Markdown) with multilingual support
 
 🎯 **Database Agnostic**
    Works with PostgreSQL, MySQL, SQLite - any database that supports JSONField
 
 📝 **Rich Admin Integration**
-   Beautiful tab and dropdown interfaces for managing translations in Django admin
+   Beautiful tab and dropdown interfaces for managing translations in Django admin, with Markdown editor support via `martor <https://github.com/agusmakmun/django-markdown-editor>`_
 
 🔍 **Powerful Querying**
    Filter, order, and annotate queries with language-specific values using ``L()`` expressions
@@ -55,6 +55,9 @@ Installation
 .. code-block:: bash
 
     pip install django-i18n-fields
+
+    # With Markdown editor support (martor)
+    pip install django-i18n-fields[md]
 
 Basic Usage
 ~~~~~~~~~~~
@@ -178,11 +181,12 @@ Requirements
 - Python 3.10+
 - Django 5.0+
 - Django REST Framework 3.0+ (optional, for DRF integration)
+- martor (optional, for Markdown editor support — install with ``pip install django-i18n-fields[md]``)
 
 Contributing
 ------------
 
-We welcome contributions! Please see our `Contributing Guide <https://github.com/huynguyengl99/django-i18n-fields/blob/main/CONTRIBUTING.md>`_.
+We welcome contributions! Please see our `Contributing Guide <https://github.com/huynguyengl99/django-i18n-fields/blob/main/CONTRIBUTING.md>`_ for detailed instructions.
 
 **Development Setup:**
 
@@ -190,13 +194,15 @@ We welcome contributions! Please see our `Contributing Guide <https://github.com
 
     git clone https://github.com/huynguyengl99/django-i18n-fields.git
     cd django-i18n-fields
-    pip install -e ".[dev]"
+    uv venv
+    source .venv/bin/activate
+    uv sync --all-extras
     pytest
 
 License
 -------
 
-BSD 3-Clause License - see `LICENSE <https://github.com/huynguyengl99/django-i18n-fields/blob/main/LICENSE>`_ for details.
+MIT License - see `LICENSE <https://github.com/huynguyengl99/django-i18n-fields/blob/main/LICENSE>`_ for details.
 
 Support
 -------
