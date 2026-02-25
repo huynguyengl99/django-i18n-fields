@@ -7,10 +7,19 @@
         </li>
     {% endfor %}
     </ul>
+    {% if widget.md %}
+    {{ widget.md }}
+    {% for subwidget in widget.subwidgets %}
+        <div class="i18n-fields-panel" style="display:none" role="tabpanel" id="{{ widget_id }}_{{ subwidget.lang_code }}" data-lang="{{ subwidget.lang_code }}">
+            {% include subwidget.template_name with widget=subwidget %}
+        </div>
+    {% endfor %}
+    {% else %}
     {% for subwidget in widget.subwidgets %}
         <div class="i18n-fields-panel" role="tabpanel" id="{{ widget_id }}_{{ subwidget.lang_code }}" data-lang="{{ subwidget.lang_code }}">
             {% include subwidget.template_name with widget=subwidget %}
         </div>
     {% endfor %}
+    {% endif %}
 </div>
 {% endwith %}

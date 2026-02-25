@@ -73,5 +73,14 @@ __all__ = [
     "i18n_fields_settings",
 ]
 
+# Conditional martor field (only available if martor is installed)
+try:
+    from .md.fields import LocalizedMartorField  # noqa
+
+    __all__.append("LocalizedMartorField")
+except ImportError:  # pragma: no cover
+    # martor is not installed, field will not be available
+    pass
+
 __version__ = "0.1.0"
 default_app_config = "i18n_fields.apps.I18nFieldsConfig"

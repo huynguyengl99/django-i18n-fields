@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "django_extensions",
     "i18n_fields",
+    "martor",
     "accounts",
     "articles",
 ]

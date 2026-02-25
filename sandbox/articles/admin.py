@@ -32,7 +32,7 @@ class ArticleAdmin(LocalizedFieldsAdminMixin, admin.ModelAdmin):
     raw_id_fields = ["category"]
 
     fieldsets = [
-        (None, {"fields": ["title", "slug", "summary", "content"]}),
+        (None, {"fields": ["title", "slug", "summary", "content", "markdown_notes"]}),
         ("Metadata", {"fields": ["view_count", "rating", "is_featured"]}),
         ("Relations", {"fields": ["category"]}),
         ("Status", {"fields": ["published", "created_at", "updated_at"]}),

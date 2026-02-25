@@ -180,10 +180,16 @@ class LocalizedFieldsAdminMixin(Generic[_ModelT]):
 
     class Media:
         css = {"all": ("i18n_fields/i18n-fields-admin.css",)}
-        js = (
+        _base_js = (
             "admin/js/jquery.init.js",
             "i18n_fields/i18n-fields-admin.js",
         )
+        try:
+            import martor  # noqa: F401  # pyright: ignore[reportMissingTypeStubs,reportUnusedImport]
+
+            js = _base_js + ("i18n_fields/js/martor_tabs.js",)
+        except ImportError:  # pragma: no cover
+            js = _base_js  # type: ignore[assignment]
 
     def __init__(self, model: Any, admin_site: Any) -> None:
         """Initialize the admin with dynamic display methods for localized fields."""

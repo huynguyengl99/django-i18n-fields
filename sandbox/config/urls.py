@@ -48,6 +48,7 @@ urlpatterns = [
     path("", RedirectView.as_view(url="admin/")),
     path("admin/", admin.site.urls),
     path("api/", include(api_urlpatterns)),  # type: ignore[arg-type]
+    path("martor/", include("martor.urls")),
 ]
 
 

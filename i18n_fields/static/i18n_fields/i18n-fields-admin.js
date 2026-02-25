@@ -11,6 +11,7 @@
         $('.i18n-fields-widget[data-display="tabs"]').each(function() {
             var $widget = $(this);
             var $tabs = $widget.find('li.i18n-fields-widget.tab');
+            var hasMartor = $widget.find('.main-martor').length > 0;
 
             $tabs.each(function() {
                 var $tab = $(this);
@@ -22,13 +23,16 @@
                     $tabs.removeClass('active');
                     $tab.addClass('active');
 
-                    // Show corresponding panel
+                    // Show corresponding panel (skip if martor — panels stay hidden)
                     var panelId = $label.attr('for');
                     $widget.find('.i18n-fields-panel').removeClass('active').hide();
-                    $('#' + panelId).addClass('active').show();
+                    var $panel = $('#' + panelId).addClass('active');
+                    if (!hasMartor) {
+                        $panel.show();
+                    }
 
                     // Trigger resize for editors
-                    triggerEditorResize($('#' + panelId));
+                    triggerEditorResize($panel);
                 }
             });
         });
@@ -41,6 +45,7 @@
         $('.i18n-fields-widget[data-display="dropdown"]').each(function() {
             var $widget = $(this);
             var $selector = $widget.find('.i18n-fields-language-selector');
+            var hasMartor = $widget.find('.main-martor').length > 0;
 
             // Find option by text (language name)
             $selector.find('option').each(function() {
@@ -49,14 +54,17 @@
                 }
             });
 
-            // Show corresponding panel by language code
+            // Show corresponding panel by language code (skip if martor — panels stay hidden)
             var selectedLang = $selector.val();
             $widget.find('.i18n-fields-panel').removeClass('active').hide();
-            $widget.find('.i18n-fields-panel[data-lang="' + selectedLang + '"]')
-                .addClass('active').show();
+            var $panel = $widget.find('.i18n-fields-panel[data-lang="' + selectedLang + '"]')
+                .addClass('active');
+            if (!hasMartor) {
+                $panel.show();
+            }
 
             // Trigger resize for editors
-            triggerEditorResize($widget.find('.i18n-fields-panel.active'));
+            triggerEditorResize($panel);
         });
     }
 
@@ -192,6 +200,8 @@
             if ($widget.data('i18n-initialized')) return;
             $widget.data('i18n-initialized', true);
 
+            var hasMartor = $widget.find('.main-martor').length > 0;
+
             // Hide all panels initially
             $widget.find('.i18n-fields-panel').hide();
 
@@ -201,7 +211,10 @@
             var firstPanelId = $firstLabel.attr('for');
 
             $firstTab.addClass('active');
-            $('#' + firstPanelId).addClass('active').show();
+            var $panel = $('#' + firstPanelId).addClass('active');
+            if (!hasMartor) {
+                $panel.show();
+            }
         });
 
         // Tab click handler (using delegation for dynamically added content)
@@ -225,15 +238,20 @@
             if ($widget.data('i18n-initialized')) return;
             $widget.data('i18n-initialized', true);
 
+            var hasMartor = $widget.find('.main-martor').length > 0;
+
             // Hide all panels initially
             $widget.find('.i18n-fields-panel').hide();
 
-            // Get first language and show its panel
+            // Get first language and activate its panel
             var $selector = $widget.find('.i18n-fields-language-selector');
             var firstLang = $selector.find('option').first().val();
 
-            $widget.find('.i18n-fields-panel[data-lang="' + firstLang + '"]')
-                .addClass('active').show();
+            var $panel = $widget.find('.i18n-fields-panel[data-lang="' + firstLang + '"]')
+                .addClass('active');
+            if (!hasMartor) {
+                $panel.show();
+            }
         });
 
         // Dropdown change handler (using delegation)

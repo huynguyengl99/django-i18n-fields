@@ -8,6 +8,7 @@ from i18n_fields import (
     LocalizedCharField,
     LocalizedFloatField,
     LocalizedIntegerField,
+    LocalizedMartorField,
     LocalizedTextField,
     LocalizedUniqueSlugField,
 )
@@ -35,6 +36,7 @@ class Article(AtomicSlugRetryMixin, models.Model):
     slug = LocalizedUniqueSlugField(populate_from="title", include_time=False)
     summary = LocalizedCharField(blank=True, max_length=500)
     content = LocalizedTextField(blank=True)
+    markdown_notes = LocalizedMartorField(blank=True, default=dict)
 
     # Localized typed fields
     view_count = LocalizedIntegerField(blank=True)
