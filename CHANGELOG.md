@@ -1,3 +1,9 @@
+## v1.2.0 (2026-02-25)
+
+### Feat
+
+- add support for markdown - martor field
+
 ## v1.1.1 (2026-02-01)
 
 ### Fix
