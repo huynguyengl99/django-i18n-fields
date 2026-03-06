@@ -33,6 +33,13 @@
 
                     // Trigger resize for editors
                     triggerEditorResize($panel);
+
+                    // Sync martor content if present
+                    if (hasMartor && typeof window.syncMartorWithActivePanel !== 'undefined') {
+                        setTimeout(function() {
+                            window.syncMartorWithActivePanel($widget);
+                        }, 50);
+                    }
                 }
             });
         });
@@ -65,6 +72,13 @@
 
             // Trigger resize for editors
             triggerEditorResize($panel);
+
+            // Sync martor content if present
+            if (hasMartor && typeof window.syncMartorWithActivePanel !== 'undefined') {
+                setTimeout(function() {
+                    window.syncMartorWithActivePanel($widget);
+                }, 50);
+            }
         });
     }
 

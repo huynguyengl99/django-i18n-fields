@@ -61,6 +61,9 @@
         });
     }
 
+    // Expose function globally so it can be called from i18n-fields-admin.js
+    window.syncMartorWithActivePanel = syncMartorWithActivePanel;
+
     $(window).on('load', function() {
         // Setup ACE -> textarea sync (write-back on user edits)
         $('.i18n-fields-widget').each(function() {
