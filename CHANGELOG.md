@@ -1,3 +1,9 @@
+## v1.2.1 (2026-03-06)
+
+### Fix
+
+- sync markdown content when language change in other field
+
 ## v1.2.0 (2026-02-25)
 
 ### Feat
